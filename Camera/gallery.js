@@ -11,11 +11,11 @@ setTimeout(() => {
     let imageRequest = imageStore.getAll();
     imageRequest.onsuccess = function () {
       if (imageRequest.result !== undefined) {
-        console.log("Images", imageRequest.result);
+        // console.log("Images", imageRequest.result);
         let imageResult = imageRequest.result;
         imageResult.forEach((imageObj) => {
           //create a img container
-          console.log(imageObj);
+          // console.log(imageObj);
           let url = imageObj.url;
           var imageEle = document.createElement("div");
           imageEle.setAttribute("class", "media-cont");
@@ -31,13 +31,13 @@ setTimeout(() => {
           //appendchild in gallery-cont
           galleryCont.appendChild(imageEle);
           let deleteBtn = imageEle.querySelector(".delete");
-            deleteBtn.addEventListener("click", deleteListener); 
+          deleteBtn.addEventListener("click", deleteListener);
 
           let downloadBtn = imageEle.querySelector(".download");
           downloadBtn.addEventListener("click", downloadListener);
         });
       } else {
-        console.log("No such images");
+        // console.log("No such images");
       }
     };
 
@@ -48,8 +48,8 @@ setTimeout(() => {
       let videoResult = videoRequest.result;
       videoResult.forEach((videoObj) => {
         let videoElem = document.createElement("div");
-          videoElem.setAttribute("class", "media-cont");
-          videoElem.setAttribute("id", videoObj.id);
+        videoElem.setAttribute("class", "media-cont");
+        videoElem.setAttribute("id", videoObj.id);
         let url = URL.createObjectURL(videoObj.blobData);
 
         videoElem.innerHTML = `
@@ -75,10 +75,10 @@ setTimeout(() => {
 function deleteListener(e) {
   //get id from e
   let id = e.target.parentElement.getAttribute("id");
-  console.log(id);
+  // console.log(id);
   //find id belongs to which store
   let mediaType = id.split("-")[0]; //img
-  console.log(mediaType);
+  // console.log(mediaType);
   // go into the db of video/img
   //delete it
   if (mediaType == "img") {
@@ -92,12 +92,45 @@ function deleteListener(e) {
     videoStore.delete(id);
   }
   //delete from frontend
-    e.target.parentElement.remove();
+  e.target.parentElement.remove();
 }
 
-function downloadListener() {
-    
+function downloadListener(e) {
+  let id = e.target.parentElement.getAttribute("id");
+  // console.log(id);
+  //find id belongs to which store
+  let mediaType = id.split("-")[0]; //img
+  // console.log(mediaType);
+  // go into the db of video/img
+  //delete it
+  if (mediaType == "img") {
+    let imageDBTransaction = db.transaction("image", "readonly");
+    let imageStore = imageDBTransaction.objectStore("image");
+    let imageRequest = imageStore.get(id);
+    imageRequest.onsuccess = () => {
+      let imageResult = imageRequest.result;
+      let url = imageResult.url;
+
+      let a = document.createElement("a");
+      a.href = url;
+      a.download = `${id}.png`;
+      a.click();
+      a.remove();
+    };
+  } else {
+    //video
+    let videoDBTransaction = db.transaction("video", "readonly");
+    let videoStore = videoDBTransaction.objectStore("video");
+    let videoRequest = videoStore.get(id);
+    videoRequest.onsuccess = () => {
+      let videoResult = videoRequest.result;
+      let url = URL.createObjectURL(videoResult.blobData);
+      let a = document.createElement("a");
+      a.href = url;
+      a.download = `img-${id}.png`;
+      a.click();
+      a.remove();
+    };
+  }
 }
-
-
 
