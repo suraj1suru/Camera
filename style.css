@@ -50,7 +50,7 @@ video{
     background-color: white;
     height: 3rem;
     width:3rem;
-    border-radius: 50%;
+    border-radius: 50%;    
 }
 
 .timer-cont{
@@ -155,4 +155,14 @@ video{
     100%{
         transform: scale(1);
     }
+}
+
+.cir{
+    border-radius: 100%;
+    background-color: black;
+}
+
+.recordbtn{
+    border-radius: 100%;
+   background-color: black;
 }

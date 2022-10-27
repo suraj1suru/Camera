@@ -7,6 +7,7 @@ const timerCont = document.querySelector(".timer-cont");
 const timer = document.querySelector(".timer");
 const video = document.querySelector("video");
 let filterColor = "transparent";
+
 const gallery = document.querySelector(".gallery");
 const constraints = {
     video: true,

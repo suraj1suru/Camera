@@ -25,8 +25,15 @@ setTimeout(() => {
                 <div class="media">
                 <img src="${url}"/>
                 </div>
-                <div class="delete action-btn">DELETE</div>
-                <div class="download action-btn">DOWNLOAD</div>
+                <div class="delete action-btn"> <span class="material-symbols-outlined">
+                delete
+                </span></div>
+                <div class="download action-btn"><span class="material-symbols-outlined">
+                download
+                </span></div>
+                <div class="share action-btn"> <span class="material-symbols-outlined">
+                share
+                </span></div>
                 `;
           //appendchild in gallery-cont
           galleryCont.appendChild(imageEle);
@@ -35,6 +42,9 @@ setTimeout(() => {
 
           let downloadBtn = imageEle.querySelector(".download");
           downloadBtn.addEventListener("click", downloadListener);
+
+          let shareBtn = imageEle.querySelector(".share");
+          shareBtn.addEventListener("click", ShareListener);
         });
       } else {
         // console.log("No such images");
@@ -56,8 +66,15 @@ setTimeout(() => {
                 <div class="media">
                 <video autoplay muted loop src="${url}"/>
                 </div>
-                <div class="delete action-btn">DELETE</div>
-                <div class="download action-btn">DOWNLOAD</div>
+                <div class="delete action-btn"> <span class="material-symbols-outlined">
+                delete
+                </span></div>
+                <div class="download action-btn"><span class="material-symbols-outlined">
+                download
+                </span></div>
+                <div class="share action-btn"><span class="material-symbols-outlined">
+                <button class="shareBtn1" onclick={func}>share</button>
+                </span></div>
               `;
 
         galleryCont.appendChild(videoElem);
@@ -67,10 +84,36 @@ setTimeout(() => {
 
         let downloadBtn = videoElem.querySelector(".download");
         downloadBtn.addEventListener("click", downloadListener);
+
+        let shareBtn = videoElem.querySelector(".share");
+        shareBtn.addEventListener("click", ShareListener);
       });
     };
   }
 }, 100);
+
+const shareData = {
+  title: 'MDN',
+  url: "url",
+};
+
+
+
+function func(){
+  alert(allow)
+}
+
+async function ShareListener() {
+
+  // Share must be triggered by "user activation"
+  console.log(shareData.url)
+    try {
+      await navigator.share(shareData);
+      resultPara.textContent = "shared successfully";
+    } catch (err) {
+      resultPara.textContent = `Error: ${err}`;
+    }
+}
 
 function deleteListener(e) {
   //get id from e
@@ -133,4 +176,3 @@ function downloadListener(e) {
     };
   }
 }
-
